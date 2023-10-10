@@ -1,0 +1,79 @@
+import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        int numRows = 3; // Замініть на бажану кількість рядків
+        int numCols = 4; // Замініть на бажану кількість стовпців
+        int minValue = -10; // Мінімальне значення в діапазоні
+        int maxValue = 100; // Максимальне значення в діапазоні
+        int k = 2; // Кількість позицій для циклічного зсуву
+
+        int[][] matrix = createRandomMatrix(numRows, numCols, minValue, maxValue);
+        printMatrix(matrix);
+        
+        System.out.println("\nПісля циклічного зсуву:");
+        cyclicallyShiftMatrix(matrix, k);
+        printMatrix(matrix);
+    }
+
+    public static int[][] createRandomMatrix(int numRows, int numCols, int minValue, int maxValue) {
+        int[][] matrix = new int[numRows][numCols];
+        Random rand = new Random();
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                matrix[i][j] = rand.nextInt(maxValue - minValue + 1) + minValue;
+            }
+        }
+
+        return matrix;
+    }
+
+    public static void printMatrix(int[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Виводимо заголовок стовпців
+        System.out.print("       ");
+        for (int j = 1; j <= numCols; j++) {
+            System.out.print("стовпець " + j + " ");
+        }
+        System.out.println();
+
+        // Виводимо дані матриці
+        for (int i = 0; i < numRows; i++) {
+            System.out.print("рядок " + (i + 1) + "  ");
+            for (int j = 0; j < numCols; j++) {
+                System.out.print(matrix[i][j] + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void cyclicallyShiftMatrix(int[][] matrix, int k) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Циклічний зсув вправо
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < k; j++) {
+                int lastValue = matrix[i][numCols - 1];
+                for (int col = numCols - 1; col > 0; col--) {
+                    matrix[i][col] = matrix[i][col - 1];
+                }
+                matrix[i][0] = lastValue;
+            }
+        }
+
+        // Циклічний зсув догори
+        for (int j = 0; j < numCols; j++) {
+            for (int i = 0; i < k; i++) {
+                int firstValue = matrix[0][j];
+                for (int row = 0; row < numRows - 1; row++) {
+                    matrix[row][j] = matrix[row + 1][j];
+                }
+                matrix[numRows - 1][j] = firstValue;
+            }
+        }
+    }
+}
